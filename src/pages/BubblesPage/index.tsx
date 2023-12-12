@@ -11,8 +11,8 @@ const BubblesPage = () => {
   const [creatingBubble, setCreatingBubble] = useState<boolean>(false);
   const [buttonPillOpen, setButtonPillOpen] = useState<boolean>(true);
   const [bubbleName, setBubbleName] = useState("");
-  const [bubbleLongitude, setBubbleLongitude] = useState(-70.9);
-  const [bubbleLatitude, setBubbleLatitude] = useState(42.35);
+  const [bubbleLongitude, setBubbleLongitude] = useState(-111.8855);
+  const [bubbleLatitude, setBubbleLatitude] = useState(40.7623);
   const mapContainer = useRef(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
@@ -24,7 +24,14 @@ const BubblesPage = () => {
       center: [bubbleLongitude, bubbleLatitude],
       zoom: 9
     });
-  }, []);
+
+    map.current.on('move', () => {
+      if (map.current !== null)  {
+        setBubbleLongitude(parseFloat(map.current.getCenter().lng.toFixed(4)));
+        setBubbleLatitude(parseFloat(map.current.getCenter().lat.toFixed(4)));
+      }
+    });
+  });
 
   const createBubble = () => {
     console.log({
@@ -34,8 +41,6 @@ const BubblesPage = () => {
     });
     setCreatingBubble(false);
     setBubbleName("");
-    setBubbleLongitude(-70.9);
-    setBubbleLatitude(42.35);
   };
 
   return (
