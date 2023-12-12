@@ -229,8 +229,26 @@
   background-color: #006DAA;
 }
 
+.upperInputsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .input {
   width: 100%;
+  margin-bottom: 20px !important;
+  border-radius: 30px !important;
+}
+
+.nameInput {
+  width: 65%;
+  margin-bottom: 20px !important;
+  border-radius: 30px !important;
+}
+
+.radiusInput {
+  width: 30%;
   margin-bottom: 20px !important;
   border-radius: 30px !important;
 }
