@@ -1,19 +1,27 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import "./App.css"
+import 'mapbox-gl/dist/mapbox-gl.css';
 
-import PageLoader from "./components/Loader";
+import PageLoader from "./components/PageLoader";
 
-const HomePage = lazy(() => import('./pages/HomePage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const BubblesPage = lazy(() => import('./pages/BubblesPage'));
+const BubblePage = lazy(() => import('./pages/BubblePage'));
 
 function App() {
   return (
-    <Router>
-      <Routes>
+    <div className='app-container'>
+      <Router>
         <Suspense fallback={<PageLoader />}>
-          <Route path="/" element={<HomePage />} />
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/bubbles" element={<BubblesPage />} />
+            <Route path="/bubbles/:bubbleId" element={<BubblePage />} />
+          </Routes>
         </Suspense>
-      </Routes>
-    </Router>
+      </Router>
+    </div>
   );
 }
 
