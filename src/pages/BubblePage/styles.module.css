@@ -10,12 +10,50 @@
   height: 50px;
   outline: 1px #D6D6D6 solid;
   border-radius: 0px 0px 30px 0px;
-  top: 0px;
   z-index: 2;
   background-color: #F5F5F5;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+}
+
+.headerLeftContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerTitleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.bubbleTitle {
+  color: #006DAA;
+  font-size: 25px !important;
+}
+
+.bubbleSubTitle {
+  color: #006DAA;
+  font-size: 12px !important;
+}
+
+.backIconContainer {
+  margin-left: 10px;
+}
+
+.backIcon {
+  color: #006DAA;
+  font-size: 40px !important;
+}
+
+.settingsIcon {
+  color: #006DAA;
+  font-size: 40px !important;
+  margin-right: 15px;
 }
 
 .chatContainer {

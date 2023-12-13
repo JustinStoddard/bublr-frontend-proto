@@ -6,19 +6,29 @@ import { Add, ChevronLeft } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import mapboxgl, { Map, Marker, GeoJSONSource } from 'mapbox-gl';
 import { getLocalStorageItem, setLocalStorageItem } from "../../utils/localStorage";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Bubble } from "../../types/bubble-types";
  
 mapboxgl.accessToken = 'pk.eyJ1IjoianVzdGluLXN0b2RkYXJkIiwiYSI6ImNscTIxajJ4djAwdHgycnMyeW0yeXNzdG8ifQ.Fo2r-RxjpR8GJ7a6cq7gPg';
 
 const BubblesPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const lng = parseFloat(queryParams.get('lng') || "-111.8855");
+  const lat = parseFloat(queryParams.get('lat') || "40.7623");
+
   const [creatingBubble, setCreatingBubble] = useState<boolean>(false);
-  const [bubbleFocused, setBubbleFocused] = useState<Bubble | null>(null);
+  const [bubbleFocused, setBubbleFocused] = useState<Bubble | null>(() => {
+    const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
+    const bubble = bubbles.find(bubble => bubble.bubbleLongitude === lng && bubble.bubbleLatitude === lat);
+    if (!bubble) return null;
+    return bubble;
+  });
   const [buttonPillOpen, setButtonPillOpen] = useState<boolean>(true);
   const [showMarker, setShowMarker] = useState<boolean>(false);
-  const [bubbleLongitude, setBubbleLongitude] = useState(-111.8855);
-  const [bubbleLatitude, setBubbleLatitude] = useState(40.7623);
+  const [bubbleLongitude, setBubbleLongitude] = useState(lng);
+  const [bubbleLatitude, setBubbleLatitude] = useState(lat);
   const [bubbleName, setBubbleName] = useState("");
   const [bubbleRadius, setBubbleRadius] = useState(0.5); //Radius in miles
   const [map, setMap] = useState<Map | null>(null);
