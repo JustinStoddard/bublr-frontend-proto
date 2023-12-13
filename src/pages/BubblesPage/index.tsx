@@ -7,16 +7,9 @@ import { TextField } from "@mui/material";
 import mapboxgl, { Map, Marker, GeoJSONSource } from 'mapbox-gl';
 import { getLocalStorageItem, setLocalStorageItem } from "../../utils/localStorage";
 import { useNavigate } from "react-router-dom";
+import { Bubble } from "../../types/bubble-types";
  
 mapboxgl.accessToken = 'pk.eyJ1IjoianVzdGluLXN0b2RkYXJkIiwiYSI6ImNscTIxajJ4djAwdHgycnMyeW0yeXNzdG8ifQ.Fo2r-RxjpR8GJ7a6cq7gPg';
-
-type Bubble = {
-  bubbleId: string;
-  bubbleName: string;
-  bubbleLongitude: number;
-  bubbleLatitude: number;
-  bubbleRadius: number;
-};
 
 const BubblesPage = () => {
   const navigate = useNavigate();
