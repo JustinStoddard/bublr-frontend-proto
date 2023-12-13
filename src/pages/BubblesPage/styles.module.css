@@ -252,3 +252,37 @@
   margin-bottom: 20px !important;
   border-radius: 30px !important;
 }
+
+.bubbleFocusedContainer {
+  position: absolute;
+  width: calc(100% - 60px);
+  background-color: #F5F5F5;
+  border-radius: 30px;
+  bottom: 90px;
+  z-index: 2;
+  outline: 1px #D6D6D6 solid;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: start;
+  padding: 15px 0px;
+}
+
+.bubbleFocusedName {
+  color: #006DAA;
+  font-weight: 800px;
+  font-size: 25px;
+  margin-left: 30px;
+}
+
+.bubbleFocusedRadius {
+  margin-left: 30px;
+}
+
+.bubbleFocusedButtonsContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+}

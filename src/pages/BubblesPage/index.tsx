@@ -5,7 +5,8 @@ import PageContainer from "../../components/PageContainer";
 import { Add, ChevronLeft } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import mapboxgl, { Map, Marker, GeoJSONSource } from 'mapbox-gl';
-import useLocalStorage from "../../hooks/useLocalStorage";
+import { getLocalStorageItem, setLocalStorageItem } from "../../utils/localStorage";
+import { useNavigate } from "react-router-dom";
  
 mapboxgl.accessToken = 'pk.eyJ1IjoianVzdGluLXN0b2RkYXJkIiwiYSI6ImNscTIxajJ4djAwdHgycnMyeW0yeXNzdG8ifQ.Fo2r-RxjpR8GJ7a6cq7gPg';
 
@@ -18,8 +19,9 @@ type Bubble = {
 };
 
 const BubblesPage = () => {
-  const [storedItem, setStoredItem] = useLocalStorage('bubbles', []);
+  const navigate = useNavigate();
   const [creatingBubble, setCreatingBubble] = useState<boolean>(false);
+  const [bubbleFocused, setBubbleFocused] = useState<Bubble | null>(null);
   const [buttonPillOpen, setButtonPillOpen] = useState<boolean>(true);
   const [showMarker, setShowMarker] = useState<boolean>(false);
   const [bubbleLongitude, setBubbleLongitude] = useState(-111.8855);
@@ -28,6 +30,7 @@ const BubblesPage = () => {
   const [bubbleRadius, setBubbleRadius] = useState(0.5); //Radius in miles
   const [map, setMap] = useState<Map | null>(null);
   const [marker, setMarker] = useState<Marker | null>(null);
+  const [activeMarker, setActiveMarker] = useState<Marker | null>(null);
 
   useEffect(() => {
     const initializeMap = () => {
@@ -56,20 +59,18 @@ const BubblesPage = () => {
 
   useEffect(() => {
     if (map) {
-      map.on("move", () => {
-        updateMarkerPosition();
+      map.on("move", () => updateMarkerPosition());
+      map.on('zoom', () => updateCircleRadius(bubbleRadius));
+      map.on('touchstart', () => {
+        setBubbleFocused(null);
+        setActiveMarker(null);
       });
-      map.on('zoom', () => {
-        updateCircleRadius(bubbleRadius);
+      map.on('dragstart', () => {
+        setBubbleFocused(null);
+        setActiveMarker(null);
       });
-      // map.on('touchstart', () => {
-      //   setButtonPillOpen(false);
-      // });
-      // map.on('touchend', () => {
-      //   setButtonPillOpen(true);
-      // });
     }
-  }, [map, bubbleRadius, creatingBubble]);
+  }, [map, bubbleRadius, creatingBubble, bubbleFocused]);
 
   useEffect(() => {
     updateCircleRadius(bubbleRadius);
@@ -90,7 +91,7 @@ const BubblesPage = () => {
   }, [marker, map, showMarker]);
 
   const renderBubbles = (mapInstance: Map) => {
-    const bubbles = storedItem as Bubble[];
+    const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
     bubbles.map(bubble => {
       mapInstance.addSource(`circle-source-${bubble.bubbleId}`, {
         type: 'geojson',
@@ -120,15 +121,18 @@ const BubblesPage = () => {
   };
 
   const renderMarkers = (mapInstance: Map) => {
-    const bubbles = storedItem as Bubble[];
+    const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
     bubbles.map(bubble => {
-      new mapboxgl.Marker({ color: "#006DAA" }).setLngLat([bubble.bubbleLongitude, bubble.bubbleLatitude]).addTo(mapInstance).getElement().addEventListener('click', () => {
+      const marker = new mapboxgl.Marker({ color: "#006DAA" }).setLngLat([bubble.bubbleLongitude, bubble.bubbleLatitude]).addTo(mapInstance);
+      marker.getElement().addEventListener('click', () => {
         flyTo(mapInstance, bubble);
+        setActiveMarker(marker);
       });
     });
   };
 
   const flyTo = (mapInstance: Map, bubble: Bubble) => {
+    setBubbleFocused(bubble);
     mapInstance.flyTo({
       center: [bubble.bubbleLongitude, bubble.bubbleLatitude],
       zoom: 12, // You can adjust the zoom level here
@@ -161,9 +165,18 @@ const BubblesPage = () => {
         'circle-stroke-width': 2,
       },
     });
-    new mapboxgl.Marker({ color: "#006DAA" }).setLngLat([bubble.bubbleLongitude, bubble.bubbleLatitude]).addTo(mapInstance).getElement().addEventListener('click', () => {
+    const marker = new mapboxgl.Marker({ color: "#006DAA" }).setLngLat([bubble.bubbleLongitude, bubble.bubbleLatitude]).addTo(mapInstance)
+    marker.getElement().addEventListener('click', () => {
       flyTo(mapInstance, bubble);
+      setActiveMarker(marker);
     });
+  };
+
+  const unrenderBubble = (bubble: Bubble, mapInstance: Map) => {
+    mapInstance.removeLayer(`circle-layer-${bubble.bubbleId}`);
+    mapInstance.removeSource(`circle-source-${bubble.bubbleId}`);
+    activeMarker?.remove();
+    setActiveMarker(null);
   };
 
   const calculateRadius = (zoom: number, radius: number): number => {
@@ -175,10 +188,10 @@ const BubblesPage = () => {
 
   const updateCircleRadius = (newRadius: number) => {
     if (map) {
+      const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
       map.setPaintProperty('circle-layer-1', 'circle-radius', calculateRadius(map.getZoom(), newRadius));
-      const bubbles = storedItem as Bubble[];
-      bubbles.map(bubble => {
-        map.setPaintProperty(`circle-layer-${bubble.bubbleId}`, 'circle-radius', calculateRadius(map.getZoom(), bubble.bubbleRadius));
+      bubbles.map((bubble: Bubble) => {
+        if (map.getLayer(`circle-layer-${bubble.bubbleId}`) !== null) map.setPaintProperty(`circle-layer-${bubble.bubbleId}`, 'circle-radius', calculateRadius(map.getZoom(), bubble.bubbleRadius));
       });
     }
   };
@@ -252,7 +265,8 @@ const BubblesPage = () => {
       bubbleLatitude,
       bubbleRadius,
     };
-    setStoredItem([...storedItem, bubble] as any);
+    const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
+    setLocalStorageItem("bubbles", [...bubbles, bubble] as any);
     setCreatingBubble(false);
     setBubbleName("");
     setShowMarker(false);
@@ -271,6 +285,23 @@ const BubblesPage = () => {
 
   const radiusOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBubbleRadius(e.currentTarget.valueAsNumber);
+  };
+
+  const deleteBubble = (focusedBubble: Bubble) => {
+    const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
+    const filteredBubbles = bubbles.filter(bubble => {
+      if (bubble.bubbleId !== focusedBubble.bubbleId) return bubble;
+    });
+    setLocalStorageItem("bubbles", filteredBubbles as any);
+    unrenderBubble(focusedBubble, map as Map);
+    setBubbleFocused(null);
+    setActiveMarker(null);
+  };
+
+  const visitBubble = (focusedBubble: Bubble) => {
+    navigate(`/bubbles/${focusedBubble.bubbleId}`);
+    setBubbleFocused(null);
+    setActiveMarker(null);
   };
 
   return (
@@ -370,6 +401,28 @@ const BubblesPage = () => {
                   >
                     Create
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {(bubbleFocused && !creatingBubble) && (
+            <div className={styles.bubbleFocusedContainer}>
+              <div className={styles.bubbleFocusedName}>{bubbleFocused.bubbleName}</div>
+              <div className={styles.bubbleFocusedRadius}>Radius: {bubbleFocused.bubbleRadius} miles</div>
+              <div className={styles.bubbleFocusedRadius}>Lng: {bubbleFocused.bubbleLongitude}</div>
+              <div className={styles.bubbleFocusedRadius}>Lat: {bubbleFocused.bubbleLatitude}</div>
+              <div className={styles.bubbleFocusedButtonsContainer}>
+                <div
+                  className={`${styles.button} ${styles.cancel}`}
+                  onClick={() => deleteBubble(bubbleFocused)}
+                >
+                  Delete
+                </div>
+                <div
+                  className={`${styles.button} ${styles.create}`}
+                  onClick={()  => visitBubble(bubbleFocused)}
+                >
+                  Visit
                 </div>
               </div>
             </div>
