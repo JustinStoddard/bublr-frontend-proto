@@ -1,4 +1,4 @@
-.loginPageContainer {
+.landingPageContainer {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,7 +12,6 @@
   color: #006DAA;
   font-size: 70px;
   margin-bottom: 30px;
-  cursor: pointer;
 }
 
 .landingTitleSub {
@@ -21,27 +20,13 @@
   font-weight: 300;
 }
 
-.inputsContainer {
-  width: 100%;
-  max-width: 300px;
+.buttonsContainer {
   display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.input {
-  width: 100%;
-  margin-bottom: 20px !important;
-}
-
-.buttonContainer {
-  display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   max-width: 370px;
-  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .button {
@@ -58,15 +43,25 @@
   cursor: pointer;
 }
 
-.disabled {
-  background-color: #D6D6D6;
-  cursor: unset;
+.warningContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Nunito', sans-serif;
+  width: 100%;
+  max-width: 370px;
+  text-align: center;
 }
 
-.errorPhrase {
-  font-family: 'Nunito', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
+.warning {
+  font-size: 30px;
+  font-weight: 800;
   color: #EC3B3B;
-  margin-bottom: 20px;
+}
+
+.subText {
+  font-family: 'Righteous', sans-serif;
+  color: #006DAA;
+  font-size: 18px;
 }

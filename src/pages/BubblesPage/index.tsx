@@ -2,16 +2,22 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import styles from "./styles.module.css";
 import PageContainer from "../../components/PageContainer";
-import { Add, ChevronLeft } from "@mui/icons-material";
+import { Add, ChevronLeft, Logout } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import mapboxgl, { Map, Marker, GeoJSONSource } from 'mapbox-gl';
 import { getLocalStorageItem, setLocalStorageItem } from "../../utils/localStorage";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Bubble } from "../../types/bubble-types";
+import { Bubble, BubbleMessage, UserContext } from "../../types/bubble-types";
+import { getBubbles } from "../../utils/getBubbles";
  
 mapboxgl.accessToken = 'pk.eyJ1IjoianVzdGluLXN0b2RkYXJkIiwiYSI6ImNscTIxajJ4djAwdHgycnMyeW0yeXNzdG8ifQ.Fo2r-RxjpR8GJ7a6cq7gPg';
 
-const BubblesPage = () => {
+type Props = {
+  userContext: UserContext;
+  setUserContext: (c: UserContext) => void;
+};
+
+const BubblesPage = ({ userContext, setUserContext }: Props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -34,6 +40,7 @@ const BubblesPage = () => {
   const [map, setMap] = useState<Map | null>(null);
   const [marker, setMarker] = useState<Marker | null>(null);
   const [activeMarker, setActiveMarker] = useState<Marker | null>(null);
+  const [userDrawerOpen, setUserDrawerOpen] = useState(false);
 
   useEffect(() => {
     const initializeMap = () => {
@@ -55,8 +62,12 @@ const BubblesPage = () => {
       });
     };
 
-    if (!map) {
-      initializeMap();
+    if (!userContext.loggedIn) {
+      navigate("/login");
+    } else {
+      if (!map) {
+        initializeMap();
+      }
     }
   }, [map]);
 
@@ -94,9 +105,9 @@ const BubblesPage = () => {
   }, [marker, map, showMarker]);
 
   const renderBubbles = (mapInstance: Map) => {
-    const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
+    const bubbles = getBubbles(userContext.user?.id || "");
     bubbles.map(bubble => {
-      mapInstance.addSource(`circle-source-${bubble.bubbleId}`, {
+      mapInstance.addSource(`circle-source-${bubble.id}`, {
         type: 'geojson',
         data: {
           type: "Feature",
@@ -109,9 +120,9 @@ const BubblesPage = () => {
       });
 
       mapInstance.addLayer({
-        id: `circle-layer-${bubble.bubbleId}`,
+        id: `circle-layer-${bubble.id}`,
         type: "circle",
-        source: `circle-source-${bubble.bubbleId}`,
+        source: `circle-source-${bubble.id}`,
         paint: {
           'circle-radius': calculateRadius(mapInstance.getZoom(), bubble.bubbleRadius), // Radius in meters (adjust as needed)
           'circle-color': '#006DAA', // Circle color
@@ -120,17 +131,20 @@ const BubblesPage = () => {
           'circle-stroke-width': 2,
         },
       });
+
+      return;
     });
   };
 
   const renderMarkers = (mapInstance: Map) => {
-    const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
+    const bubbles = getBubbles(userContext.user?.id || "");
     bubbles.map(bubble => {
       const marker = new mapboxgl.Marker({ color: "#006DAA" }).setLngLat([bubble.bubbleLongitude, bubble.bubbleLatitude]).addTo(mapInstance);
       marker.getElement().addEventListener('click', () => {
         flyTo(mapInstance, bubble);
         setActiveMarker(marker);
       });
+      return;
     });
   };
 
@@ -144,7 +158,7 @@ const BubblesPage = () => {
   };
 
   const renderBubble = (bubble: Bubble, mapInstance: Map) => {
-    mapInstance.addSource(`circle-source-${bubble.bubbleId}`, {
+    mapInstance.addSource(`circle-source-${bubble.id}`, {
       type: 'geojson',
       data: {
         type: "Feature",
@@ -157,9 +171,9 @@ const BubblesPage = () => {
     });
 
     mapInstance.addLayer({
-      id: `circle-layer-${bubble.bubbleId}`,
+      id: `circle-layer-${bubble.id}`,
       type: "circle",
-      source: `circle-source-${bubble.bubbleId}`,
+      source: `circle-source-${bubble.id}`,
       paint: {
         'circle-radius': calculateRadius(mapInstance.getZoom(), bubble.bubbleRadius), // Radius in meters (adjust as needed)
         'circle-color': '#006DAA', // Circle color
@@ -172,12 +186,13 @@ const BubblesPage = () => {
     marker.getElement().addEventListener('click', () => {
       flyTo(mapInstance, bubble);
       setActiveMarker(marker);
+      return;
     });
   };
 
   const unrenderBubble = (bubble: Bubble, mapInstance: Map) => {
-    mapInstance.removeLayer(`circle-layer-${bubble.bubbleId}`);
-    mapInstance.removeSource(`circle-source-${bubble.bubbleId}`);
+    mapInstance.removeLayer(`circle-layer-${bubble.id}`);
+    mapInstance.removeSource(`circle-source-${bubble.id}`);
     activeMarker?.remove();
     setActiveMarker(null);
   };
@@ -191,10 +206,11 @@ const BubblesPage = () => {
 
   const updateCircleRadius = (newRadius: number) => {
     if (map) {
-      const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
+      const bubbles = getBubbles(userContext.user?.id || "");
       map.setPaintProperty('circle-layer-1', 'circle-radius', calculateRadius(map.getZoom(), newRadius));
       bubbles.map((bubble: Bubble) => {
-        if (map.getLayer(`circle-layer-${bubble.bubbleId}`) !== null) map.setPaintProperty(`circle-layer-${bubble.bubbleId}`, 'circle-radius', calculateRadius(map.getZoom(), bubble.bubbleRadius));
+        if (map.getLayer(`circle-layer-${bubble.id}`) !== null) map.setPaintProperty(`circle-layer-${bubble.id}`, 'circle-radius', calculateRadius(map.getZoom(), bubble.bubbleRadius));
+        return;
       });
     }
   };
@@ -253,16 +269,10 @@ const BubblesPage = () => {
   };
 
   const createBubble = () => {
-    const bubbleId = uuidv4();
-    console.log({
-      bubbleId,
-      bubbleName,
-      bubbleLongitude,
-      bubbleLatitude,
-      bubbleRadius,
-    });
+    const id = uuidv4();
     const bubble: Bubble = {
-      bubbleId,
+      id,
+      ownerId: userContext.user?.id || "",
       bubbleName,
       bubbleLongitude,
       bubbleLatitude,
@@ -293,36 +303,91 @@ const BubblesPage = () => {
   const deleteBubble = (focusedBubble: Bubble) => {
     const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
     const filteredBubbles = bubbles.filter(bubble => {
-      if (bubble.bubbleId !== focusedBubble.bubbleId) return bubble;
+      if (bubble.id !== focusedBubble.id) return bubble;
+    });
+    const bubbleMessages = getLocalStorageItem("bubbleMessages", []) as BubbleMessage[];
+    const filteredBubbleMessages = bubbleMessages.filter(message => {
+      if (message.parentBubbleId !== focusedBubble.id) return message;
     });
     setLocalStorageItem("bubbles", filteredBubbles as any);
+    setLocalStorageItem("bubbleMessages", filteredBubbleMessages as any);
     unrenderBubble(focusedBubble, map as Map);
     setBubbleFocused(null);
     setActiveMarker(null);
   };
 
   const visitBubble = (focusedBubble: Bubble) => {
-    navigate(`/bubbles/${focusedBubble.bubbleId}`);
+    navigate(`/bubbles/${focusedBubble.id}`);
     setBubbleFocused(null);
     setActiveMarker(null);
+  };
+
+  const handleLogout = () => {
+    const userContext: UserContext = {
+      loggedIn: false,
+      user: null,
+    };
+    setUserContext(userContext);
+    setUserDrawerOpen(false);
+    navigate("/");
   };
 
   return (
     <PageContainer>
       <div className={styles.bubblePageContainer}>
-        <div className={styles.headerContainer}>
-          <div className={styles.userPhotoContainer}>
-            <div className={styles.userText}>
-              JS
+        <div className={`${styles.userDrawerContainerClosed} ${userDrawerOpen ? styles.userDrawerContainerOpen : ""}`}>
+          <div
+            className={`${styles.userDrawerBackground} ${userDrawerOpen ? styles.userDrawerBackgroundOpen : ""}`}
+            onClick={() => setUserDrawerOpen(false)}
+          />
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className={`${styles.userDrawer} ${userDrawerOpen ? styles.userDrawerOpen : ""}`}
+          >
+            <div className={styles.userDrawerContentContainer}>
+              <div
+                onClick={() => setUserDrawerOpen(true)}
+                className={styles.userDrawerPhotoContainer}
+              >
+                <div className={styles.userDrawerText}>
+                  {userContext.user?.displayName.substring(0, 2)}
+                </div>
+              </div>
+              <div className={styles.userDrawerTitleContainer}>
+                <div className={styles.drawerDisplayName}>{userContext.user?.displayName}</div>
+                <div className={styles.drawerHandle}>{userContext.user?.handle}</div>
+              </div>
+            </div>
+            <div
+              onClick={handleLogout}
+              className={styles.logoutContainer}
+            >
+              <div className={styles.logoutText}>Logout</div>
+              <Logout className={styles.logoutIcon} />
             </div>
           </div>
-          <div className={styles.logoContainer}>
+        </div>
+        <div className={styles.headerContainer}>
+          <div
+            onClick={() => setUserDrawerOpen(true)}
+            className={styles.userPhotoContainer}
+          >
+            <div className={styles.userText}>
+              {userContext.user?.displayName.substring(0, 2)}
+            </div>
+          </div>
+          <div
+            onClick={() => navigate("/")}
+            className={styles.logoContainer}
+          >
             <div className={styles.dotsContainer}>
               <div className={styles.dot1} />
               <div className={styles.dot2} />
               <div className={styles.dot3} />
             </div>
-            <div className={styles.logo}>bublr</div>
+            <div className={styles.logo}>
+              bublr<span className={styles.landingTitleSub}>proto</span>
+            </div>
           </div>
           <div
             className={`${styles.createBubbleButtonContainer} ${creatingBubble ? styles.bubbleButtonDisabled : ""}`}
