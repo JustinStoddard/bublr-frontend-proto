@@ -85,6 +85,11 @@ const RegisterPage = ({ userContext, setUserContext }: Props) => {
           onClick={() => navigate("/")}
           className={styles.landingTitle}
         >
+          <div className={styles.dotsContainer}>
+            <div className={styles.dot1} />
+            <div className={styles.dot2} />
+            <div className={styles.dot3} />
+          </div>
           bublr<span className={styles.landingTitleSub}>proto</span>
         </div>
         <div className={styles.inputsContainer}>

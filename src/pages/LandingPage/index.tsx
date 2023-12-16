@@ -10,7 +10,14 @@ const LandingPage = () => {
   return (
     <PageContainer>
       <div className={styles.landingPageContainer}>
-        <div className={styles.landingTitle}>bublr<span className={styles.landingTitleSub}>proto</span></div>
+        <div className={styles.landingTitle}>
+          <div className={styles.dotsContainer}>
+            <div className={styles.dot1} />
+            <div className={styles.dot2} />
+            <div className={styles.dot3} />
+          </div>
+          bublr<span className={styles.landingTitleSub}>proto</span>
+        </div>
         <div className={styles.buttonsContainer}>
           <div
             className={styles.button}

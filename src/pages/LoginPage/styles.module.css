@@ -13,12 +13,16 @@
   font-size: 70px;
   margin-bottom: 30px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .landingTitleSub {
   color: #aeaeae;
   font-size: 25px;
   font-weight: 300;
+  margin-top: 35px;
 }
 
 .inputsContainer {
@@ -87,4 +91,41 @@
   color: #006DAA;
   text-decoration: underline;
   margin-left: 5px;
+}
+
+.dotsContainer {
+  position: relative;
+  height: 90px;
+  width: 90px;
+  margin-right: 5px;
+}
+
+.dot1 {
+  position: absolute;
+  height: 45px;
+  width: 45px;
+  background-color: #006DAA;
+  border-radius: 50px;
+  left: 4px;
+  top: 20px;
+}
+
+.dot2 {
+  position: absolute;
+  height: 33px;
+  width: 33px;
+  background-color: #006DAA;
+  border-radius: 50px;
+  right: 4px;
+  top: 45px;
+}
+
+.dot3 {
+  position: absolute;
+  height: 26px;
+  width: 26px;
+  background-color: #006DAA;
+  border-radius: 50px;
+  right: 11px;
+  top: 11px;
 }
