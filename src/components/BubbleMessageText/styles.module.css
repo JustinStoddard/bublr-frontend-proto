@@ -1,3 +1,151 @@
 .messageContainer {
-  
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.messageContentContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.messagePhotoContainer {
+  position: relative;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #E7E7E7;
+  border-radius: 50px;
+}
+
+.messagePhotoText {
+  color: #006DAA;
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+}
+
+.messageTextContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-left: 10px;
+  width: calc(100% - 90px);
+}
+
+.messageTextTitleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.messageDisplayName {
+  color: #000000;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.messageHandle {
+  color: #535353;
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.daysSince {
+  margin-left: 5px;
+  color: #535353;
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+}
+
+.messageText {
+  color: #000000;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+}
+
+.dialogContainer {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialogContainerActive {
+  background-color: #006DAA;
+  border-radius: 50px;
+  z-index: 6;
+}
+
+.dialog {
+  color: #006DAA;
+  font-size: 40px !important;
+}
+
+.dialogActive {
+  color: #ffffff;
+}
+
+.dialogPopoutContainer {
+  position: absolute;
+  background-color: #ffffff;
+  border: 2px solid #006DAA;
+  height: 150px;
+  width: 180px;
+  border-radius: 30px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  top: 20px;
+  right: 15px;
+  z-index: 5;
+}
+
+.dialogOptionContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid #D6D6D6;
+  height: 30px;
+  padding: 10px;
+  width: calc(100% - 20px);
+  cursor: pointer;
+}
+
+.dialogDelete {
+  color: #EC3B3B;
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-left: 10px;
+}
+
+.deleteIcon {
+  color: #EC3B3B;
+  font-size: 25px !important;
+  margin-left: 5px;
+}
+
+.premiumBadgeContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #006DAA;
+  border-radius: 30px;
+  height: 18px;
+  width: 18px;
+  margin-left: 5px;
+}
+
+.checkIcon {
+  color: #ffffff;
+  font-size: 14px !important;
 }

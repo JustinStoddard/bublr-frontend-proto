@@ -70,3 +70,21 @@
   color: #EC3B3B;
   margin-bottom: 20px;
 }
+
+.dontHaveAnAccount {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-family: 'Nunito', sans-serif;
+  color: #000000;
+  font-size: 15px;
+}
+
+.registerText {
+  font-family: 'Righteous', sans-serif;
+  cursor: pointer;
+  color: #006DAA;
+  text-decoration: underline;
+  margin-left: 5px;
+}

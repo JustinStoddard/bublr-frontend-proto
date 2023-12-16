@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import styles from "./styles.module.css";
 import PageContainer from "../../components/PageContainer";
-import { Add, ChevronLeft, Logout } from "@mui/icons-material";
+import { Add, Check, ChevronLeft, Logout } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import mapboxgl, { Map, Marker, GeoJSONSource } from 'mapbox-gl';
 import { getLocalStorageItem, setLocalStorageItem } from "../../utils/localStorage";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Bubble, BubbleMessage, UserContext } from "../../types/bubble-types";
+import { Bubble, BubbleMessage, BublrAccountType, UserContext } from "../../types/bubble-types";
 import { getBubbles } from "../../utils/getBubbles";
  
 mapboxgl.accessToken = 'pk.eyJ1IjoianVzdGluLXN0b2RkYXJkIiwiYSI6ImNscTIxajJ4djAwdHgycnMyeW0yeXNzdG8ifQ.Fo2r-RxjpR8GJ7a6cq7gPg';
@@ -21,20 +21,29 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const lng = parseFloat(queryParams.get('lng') || "-111.8855");
-  const lat = parseFloat(queryParams.get('lat') || "40.7623");
+  const lng = queryParams.get('lng') !== undefined ? parseFloat(queryParams.get('lng') || "0") : false;
+  const lat = queryParams.get('lng') !== undefined ? parseFloat(queryParams.get('lat') || "0") : false;
 
   const [creatingBubble, setCreatingBubble] = useState<boolean>(false);
+  const [buttonPillOpen, setButtonPillOpen] = useState<boolean>(true);
+  const [showMarker, setShowMarker] = useState<boolean>(false);
+  const [bubbleLongitude, setBubbleLongitude] = useState(() => {
+    const bubbles = getBubbles(userContext.user?.id as string);
+    if (lng) return lng;
+    return bubbles[0].bubbleLongitude;
+  });
+  const [bubbleLatitude, setBubbleLatitude] = useState(() => {
+    const bubbles = getBubbles(userContext.user?.id as string);
+    if (lat) return lat;
+    return bubbles[0].bubbleLatitude;
+  });
   const [bubbleFocused, setBubbleFocused] = useState<Bubble | null>(() => {
-    const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
-    const bubble = bubbles.find(bubble => bubble.bubbleLongitude === lng && bubble.bubbleLatitude === lat);
+    if (!lng && !lat) return null;
+    const bubbles = getBubbles(userContext.user?.id as string);
+    const bubble = bubbles.find(bubble => bubble.bubbleLongitude === bubbleLongitude && bubble.bubbleLatitude === bubbleLatitude);
     if (!bubble) return null;
     return bubble;
   });
-  const [buttonPillOpen, setButtonPillOpen] = useState<boolean>(true);
-  const [showMarker, setShowMarker] = useState<boolean>(false);
-  const [bubbleLongitude, setBubbleLongitude] = useState(lng);
-  const [bubbleLatitude, setBubbleLatitude] = useState(lat);
   const [bubbleName, setBubbleName] = useState("");
   const [bubbleRadius, setBubbleRadius] = useState(0.5); //Radius in miles
   const [map, setMap] = useState<Map | null>(null);
@@ -44,12 +53,10 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
 
   useEffect(() => {
     const initializeMap = () => {
-      const lng = bubbleLongitude;
-      const lat = bubbleLatitude;
       const mapInstance = new Map({
         container: "map",
         style: 'mapbox://styles/justin-stoddard/clq21l1m300bt01mrawpm5ijl',
-        center: [lng, lat],
+        center: [bubbleLongitude, bubbleLatitude],
         zoom: 12
       });
   
@@ -354,7 +361,14 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
                 </div>
               </div>
               <div className={styles.userDrawerTitleContainer}>
-                <div className={styles.drawerDisplayName}>{userContext.user?.displayName}</div>
+                <div className={styles.drawerDisplayName}>
+                  {userContext.user?.displayName}
+                  {userContext.user?.accountType === BublrAccountType.Premium && (
+                    <div className={styles.premiumBadgeContainer}>
+                      <Check className={styles.checkIcon} />
+                    </div>
+                  )}
+                </div>
                 <div className={styles.drawerHandle}>{userContext.user?.handle}</div>
               </div>
             </div>

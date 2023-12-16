@@ -15,12 +15,19 @@ export type Bubble = {
   bubbleRadius: number;
 };
 
+export enum BublrAccountType {
+  Standard = "standard",
+  Premium = "premium",
+  Business = "business",
+}
+
 export type BublrUser = {
   id: string;
   displayName: string;
   handle: string;
   email: string;
   password: string;
+  accountType: BublrAccountType;
 };
 
 export type UserContext = {

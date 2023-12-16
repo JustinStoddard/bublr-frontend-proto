@@ -21,7 +21,9 @@ const BubblePage = ({ userContext }: Props) => {
   const bubbles = getLocalStorageItem("bubbles", []) as Bubble[];
   const bubble = bubbles.find(bubble => bubble.id === bubbleId);
   const bubbleMessages = getLocalStorageItem("bubbleMessages", []) as BubbleMessage[];
+  const [renderedMessages, setRenderedMessages] = useState(getMessages(bubble?.id || ""));
   const [message, setMessage] = useState("");
+  const [dialogOpen, setDialogOpen] = useState("");
 
   useEffect(() => {
     if (!userContext.loggedIn) {
@@ -45,14 +47,25 @@ const BubblePage = ({ userContext }: Props) => {
       };
       setLocalStorageItem("bubbleMessages", [...bubbleMessages, newBubbleMessage] as any);
       setMessage("");
+      setRenderedMessages(getMessages(bubble?.id || ""));
     }
   };
 
-  const messages = getMessages(bubble?.id || "");
+  const deleteMessage = (id: string) => {
+    const filteredBubbleMessages = bubbleMessages.filter(message => {
+      if (message.id !== id) return message;
+      return;
+    });
+    setLocalStorageItem('bubbleMessages', filteredBubbleMessages);
+    setRenderedMessages(getMessages(bubble?.id || ""));
+  };
 
   return (
     <PageContainer>
       <div className={styles.bubblePageContainer}>
+        {dialogOpen && (
+          <div className={styles.dialogBackgroud} onClick={() => setDialogOpen("")} />
+        )}
         <div className={styles.headerContainer}>
           <div className={styles.headerLeftContainer}>
             <div
@@ -63,15 +76,21 @@ const BubblePage = ({ userContext }: Props) => {
             </div>
             <div className={styles.headerTitleContainer}>
               <div className={styles.bubbleTitle}>{(bubble?.bubbleName.length || 0) > 21 ? `${bubble?.bubbleName.substring(0, 21)}...` : bubble?.bubbleName}</div>
-              <div className={styles.bubbleSubTitle}>1 Active User * 0 Active Vendors</div>
+              {/* <div className={styles.bubbleSubTitle}>1 Active User * 0 Active Vendors</div> */}
             </div>
           </div>
           <Settings className={styles.settingsIcon} />
         </div>
         <div className={styles.chatContainer}>
-          {messages.map(message => (
+          {renderedMessages.map(message => (
             <Fragment key={message.id}>
-              <BubbleMessageText message={message} />
+              <BubbleMessageText
+                message={message}
+                user={userContext.user}
+                dialogOpen={dialogOpen}
+                setDialogOpen={(id: string) => setDialogOpen(id)}
+                deleteMessage={(id: string) => deleteMessage(id)}
+              />
             </Fragment>
           ))}
         </div>
@@ -79,6 +98,7 @@ const BubblePage = ({ userContext }: Props) => {
           <TextField
             variant="outlined"
             size="small"
+            type="text"
             label={`Message ${bubble?.bubbleName || ""}`}
             className={styles.messageInput}
             value={message}

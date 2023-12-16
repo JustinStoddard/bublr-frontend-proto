@@ -3,9 +3,10 @@ import PageContainer from "../../components/PageContainer";
 import { BublrUser, UserContext } from "../../types/bubble-types";
 
 import styles from "./styles.module.css";
-import { TextField } from "@mui/material";
+import { IconButton, TextField } from "@mui/material";
 import { getLocalStorageItem } from "../../utils/localStorage";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 type Props = {
   userContext: UserContext;
@@ -17,6 +18,7 @@ const LoginPage = ({ userContext, setUserContext }: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (userContext.loggedIn) {
@@ -59,6 +61,7 @@ const LoginPage = ({ userContext, setUserContext }: Props) => {
             variant="outlined"
             size="small"
             label="Email"
+            type="email"
             className={styles.input}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -68,11 +71,20 @@ const LoginPage = ({ userContext, setUserContext }: Props) => {
             variant="outlined"
             size="small"
             label="Password"
+            type={showPassword ? 'text' : 'password'}
             className={styles.input}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             error={error}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              ),
+            }}
           />
+          <div className={styles.dontHaveAnAccount}>Don't have an account? <Link to={"/register"} className={styles.registerText}>Register</Link></div>
           <div className={styles.buttonContainer}>
             <div
               className={`${styles.button} ${email.length === 0 || password.length === 0 ? styles.disabled : ""}`}
