@@ -81,7 +81,9 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
   useEffect(() => {
     if (map) {
       map.on("move", () => updateMarkerPosition());
-      map.on('zoom', () => updateCircleRadius(bubbleRadius));
+      map.on('zoom', () => {
+        updateCircleRadius(bubbleRadius);
+      });
       map.on('touchstart', () => {
         setBubbleFocused(null);
         setActiveMarker(null);
@@ -208,7 +210,7 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
     const milesToMeters = 1609.34; // Conversion factor from miles to meters
     const metersPerPixel = (40075016.686 / Math.pow(2, zoom)) / 256; // Earth's circumference / 2^zoom / 256
     const meters = radius * milesToMeters;
-    return (meters / metersPerPixel) || 1; // Radius in pixels
+    return (meters / metersPerPixel) * 2.6 || 1; // Times by 2.6
   };
 
   const updateCircleRadius = (newRadius: number) => {
