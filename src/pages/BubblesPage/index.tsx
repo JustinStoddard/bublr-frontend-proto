@@ -30,12 +30,12 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
   const [bubbleLongitude, setBubbleLongitude] = useState(() => {
     const bubbles = getBubbles(userContext.user?.id as string);
     if (lng) return lng;
-    return bubbles[0].bubbleLongitude;
+    return bubbles[0]?.bubbleLongitude || -111.891751;
   });
   const [bubbleLatitude, setBubbleLatitude] = useState(() => {
     const bubbles = getBubbles(userContext.user?.id as string);
     if (lat) return lat;
-    return bubbles[0].bubbleLatitude;
+    return bubbles[0]?.bubbleLatitude || 40.758578;
   });
   const [bubbleFocused, setBubbleFocused] = useState<Bubble | null>(() => {
     if (!lng && !lat) return null;
