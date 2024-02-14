@@ -259,7 +259,7 @@
   border-radius: 30px;
   bottom: 90px;
   z-index: 2;
-  outline: 1px #D6D6D6 solid;
+  border: 1px #D6D6D6 solid;
 }
 
 .footerContainer {
