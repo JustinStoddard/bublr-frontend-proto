@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from "./styles.module.css";
 import PageContainer from "../../components/PageContainer";
 import { Add, Check, ChevronLeft, Logout } from "@mui/icons-material";
-import { TextField } from "@mui/material";
+import { Slider, TextField } from "@mui/material";
 import mapboxgl, { Map, Marker, GeoJSONSource } from 'mapbox-gl';
 import { getLocalStorageItem, setLocalStorageItem } from "../../utils/localStorage";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -76,6 +76,8 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
         initializeMap();
       }
     }
+
+    return () => map?.remove();
   }, [map]);
 
   useEffect(() => {
@@ -262,7 +264,6 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
         }
       }
     });
-
     mapInstance.addLayer({
       id: 'circle-layer-1',
       type: "circle",
@@ -297,16 +298,8 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
     renderBubble(bubble, map as Map);
   };
 
-  const longitudeOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBubbleLongitude(e.currentTarget.valueAsNumber);
-  };
-
-  const latitudeOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBubbleLatitude(e.currentTarget.valueAsNumber);
-  };
-
-  const radiusOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBubbleRadius(e.currentTarget.valueAsNumber);
+  const radiusOnChange = (newValue: number | number[]) => {
+    setBubbleRadius(newValue as number);
   };
 
   const deleteBubble = (focusedBubble: Bubble) => {
@@ -437,38 +430,24 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
                     variant="outlined"
                     label="Name"
                     size="small"
+                    type="text"
                     value={bubbleName}
                     onChange={(e) => setBubbleName(e.target.value)}
                     className={styles.nameInput}
                   />
-                  <TextField
-                    variant="outlined"
-                    label="Radius"
-                    size="small"
-                    type="number"
-                    value={bubbleRadius}
-                    onChange={radiusOnChange}
-                    className={styles.radiusInput}
-                  />
                 </div>
                 <div className={styles.lowerInputsContainer}>
-                  <TextField
-                    variant="outlined"
-                    label="Longitude"
-                    size="small"
-                    type="number"
-                    value={bubbleLongitude}
-                    onChange={longitudeOnChange}
-                    className={styles.input}
-                  />
-                  <TextField
-                    variant="outlined"
-                    label="Latitude"
-                    size="small"
-                    type="number"
-                    value={bubbleLatitude}
-                    onChange={latitudeOnChange}
-                    className={styles.input}
+                  <Slider
+                    size="medium"
+                    defaultValue={0.5}
+                    valueLabelFormat={(value: number) => `${value} mi`}
+                    valueLabelDisplay="auto"
+                    value={bubbleRadius}
+                    onChange={(_, newValue: number | number[], __) => radiusOnChange(newValue)}
+                    step={0.1}
+                    min={0.1}
+                    max={3}
+                    className={styles.sliderInput}
                   />
                 </div>
                 <div className={styles.buttonsContainer}>
