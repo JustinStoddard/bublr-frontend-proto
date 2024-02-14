@@ -4,6 +4,7 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .userDrawerContainerClosed {
@@ -12,11 +13,13 @@
   width: 100%;
   height: 100%;
   z-index: 3;
-  left: -100vw;
+  left: -100%;
+  box-sizing: border-box;
 }
 
 .userDrawerContainerOpen {
-  left: 0vw;
+  left: 0%;
+  box-sizing: border-box;
 }
 
 .userDrawerBackground {
@@ -28,11 +31,13 @@
   width: 100%;
   height: 100%;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .userDrawerBackgroundOpen {
   transition: 0.5s;
   opacity: 0.3;
+  box-sizing: border-box;
 }
 
 .userDrawer {
@@ -45,12 +50,14 @@
   border: 1px solid #D6D6D6;
   z-index: 4;
   transition: 0.5s;
-  left: -100vw;
+  left: -100%;
+  box-sizing: border-box;
 }
 
 .userDrawerOpen {
   transition: 0.5s;
-  left: 0vw;
+  left: 0%;
+  box-sizing: border-box;
 }
 
 .headerContainer {
@@ -64,6 +71,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .userPhotoContainer {
@@ -76,6 +84,7 @@
   background-color: #E7E7E7;
   border-radius: 50px;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .userText {
@@ -89,6 +98,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .userDrawerTitleContainer {
@@ -97,6 +107,7 @@
   align-items: flex-start;
   flex-direction: column;
   margin-left: 15px;
+  box-sizing: border-box;
 }
 
 .userDrawerPhotoContainer {
@@ -108,6 +119,7 @@
   align-items: center;
   background-color: #E7E7E7;
   border-radius: 50px;
+  box-sizing: border-box;
 }
 
 .userDrawerText {
@@ -125,6 +137,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .drawerHandle {
@@ -141,6 +154,7 @@
   border-top: 1px solid #aeaeae;
   border-bottom: 1px solid #aeaeae;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .logoutText {
@@ -148,6 +162,7 @@
   font-family: 'Nunito', sans-serif;
   font-weight: 700;
   font-size: 20px;
+  box-sizing: border-box;
 }
 
 .logoutIcon {
@@ -167,6 +182,7 @@
   height: 30px;
   width: 30px;
   margin-right: 5px;
+  box-sizing: border-box;
 }
 
 .dot1 {
@@ -212,6 +228,7 @@
   width: 40px;
   border-radius: 50px;
   cursor: pointer;
+  box-sizing: border-box;
 }
 .bubbleButtonDisabled {
   cursor: default;
@@ -225,6 +242,7 @@
   border-radius: 50px;
   left: 4px;
   bottom: 4px;
+  box-sizing: border-box;
 }
 .circleDisabled {
   background-color: #D6D6D6;
@@ -251,6 +269,7 @@
   justify-content: center;
   align-items: center;
   color: darkgray;
+  box-sizing: border-box;
 }
 
 .createBubblePillContainer {
@@ -262,6 +281,7 @@
   bottom: 90px;
   z-index: 2;
   outline: 1px #D6D6D6 solid;
+  box-sizing: border-box;
 }
 
 .footerContainer {
@@ -270,10 +290,11 @@
   height: 65px;
   outline: 1px #D6D6D6 solid;
   border-radius: 30px 30px 0px 0px;
-  z-index: 4;
+  z-index: 2;
   background-color: #F5F5F5;
   display: flex;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .bubblePillButtonContainer {
@@ -282,6 +303,7 @@
   align-items: center;
   width: 100%;
   margin-top: 10px;
+  box-sizing: border-box;
 }
 
 .pillButton {
@@ -293,6 +315,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .pillButtonIconOpen {
@@ -396,6 +419,7 @@
   flex-direction: column;
   align-items: start;
   padding: 15px 0px;
+  box-sizing: border-box;
 }
 
 .bubbleFocusedName {

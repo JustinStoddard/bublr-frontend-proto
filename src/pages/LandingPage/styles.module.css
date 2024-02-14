@@ -6,6 +6,7 @@
   padding: 0px 30px;
   height: 100%;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .landingTitle {
@@ -32,6 +33,7 @@
   width: 100%;
   max-width: 370px;
   margin-bottom: 30px;
+  box-sizing: border-box;
 }
 
 .button {
@@ -57,6 +59,7 @@
   width: 100%;
   max-width: 370px;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .warning {
@@ -76,6 +79,7 @@
   height: 90px;
   width: 90px;
   margin-right: 5px;
+  box-sizing: border-box;
 }
 
 .dot1 {
