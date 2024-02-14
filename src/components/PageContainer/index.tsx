@@ -1,6 +1,4 @@
 import React, { ReactNode } from "react";
-import { Container } from "@mui/material";
-
 import styles from "./styles.module.css";
 
 type Props = {
@@ -9,12 +7,9 @@ type Props = {
 
 const PageContainer = ({ children }: Props) => {
   return (
-    <Container
-      maxWidth="sm"
-      className={styles.pageContainer}
-    >
+    <div className={styles.pageContainer}>
       {children}
-    </Container>
+    </div>
   );
 };
 

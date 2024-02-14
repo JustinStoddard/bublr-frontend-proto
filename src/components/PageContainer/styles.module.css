@@ -1,5 +1,5 @@
 .pageContainer {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   padding: 0 !important;
   background-color: #F5F5F5;
