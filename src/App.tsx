@@ -29,19 +29,17 @@ function App() {
   };
 
   return (
-    <div className='app-container'>
-      <Router>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
-            <Route path="/register" element={<RegisterPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
-            <Route path="/bubbles" element={<BubblesPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
-            <Route path="/bubbles/:bubbleId" element={<BubblePage userContext={userContext} />} />
-          </Routes>
-        </Suspense>
-      </Router>
-    </div>
+    <Router>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
+          <Route path="/register" element={<RegisterPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
+          <Route path="/bubbles" element={<BubblesPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
+          <Route path="/bubbles/:bubbleId" element={<BubblePage userContext={userContext} />} />
+        </Routes>
+      </Suspense>
+    </Router>
   );
 };
 
