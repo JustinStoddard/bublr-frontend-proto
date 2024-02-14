@@ -243,7 +243,7 @@
 
 .mapContainer {
   position: relative;
-  height: calc(100vh - 115px);
+  height: calc(100% - 115px);
   width: 100%;
   z-index: 1;
   background-color: #E5E4E2;
