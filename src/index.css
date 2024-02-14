@@ -4,6 +4,8 @@ body {
 }
 
 html {
-  height: 100dvh;
+  height: 100%;
+  width: 100%;
+  position: fixed;
   box-sizing: border-box;
 }
