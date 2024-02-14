@@ -443,7 +443,7 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
                   />
                   <TextField
                     variant="outlined"
-                    label="Radius (mi)"
+                    label="Radius"
                     size="small"
                     type="number"
                     value={bubbleRadius}
@@ -451,24 +451,26 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
                     className={styles.radiusInput}
                   />
                 </div>
-                <TextField
-                  variant="outlined"
-                  label="Longitude"
-                  size="small"
-                  type="number"
-                  value={bubbleLongitude}
-                  onChange={longitudeOnChange}
-                  className={styles.input}
-                />
-                <TextField
-                  variant="outlined"
-                  label="Latitude"
-                  size="small"
-                  type="number"
-                  value={bubbleLatitude}
-                  onChange={latitudeOnChange}
-                  className={styles.input}
-                />
+                <div className={styles.lowerInputsContainer}>
+                  <TextField
+                    variant="outlined"
+                    label="Longitude"
+                    size="small"
+                    type="number"
+                    value={bubbleLongitude}
+                    onChange={longitudeOnChange}
+                    className={styles.input}
+                  />
+                  <TextField
+                    variant="outlined"
+                    label="Latitude"
+                    size="small"
+                    type="number"
+                    value={bubbleLatitude}
+                    onChange={latitudeOnChange}
+                    className={styles.input}
+                  />
+                </div>
                 <div className={styles.buttonsContainer}>
                   <div
                     className={`${styles.button} ${styles.cancel}`}
