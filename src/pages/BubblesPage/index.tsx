@@ -76,8 +76,6 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
         initializeMap();
       }
     }
-
-    return () => map?.remove();
   }, [map]);
 
   useEffect(() => {
