@@ -294,6 +294,7 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
     setButtonPillOpen(false);
     setBubbleRadius(0.5);
     renderBubble(bubble, map as Map);
+    setBubbleFocused(bubble);
   };
 
   const radiusOnChange = (newValue: number | number[]) => {
@@ -460,8 +461,10 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
                     Cancel
                   </div>
                   <div
-                    className={`${styles.button} ${styles.create}`}
-                    onClick={() => createBubble()}
+                    className={`${styles.button} ${styles.create} ${bubbleName === "" ? styles.createDisabled : ""}`}
+                    onClick={() => {
+                      if (bubbleName !== "") createBubble();
+                    }}
                   >
                     Create
                   </div>

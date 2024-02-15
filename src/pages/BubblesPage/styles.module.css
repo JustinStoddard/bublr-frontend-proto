@@ -351,6 +351,10 @@
   background-color: #006DAA;
 }
 
+.createDisabled {
+  background-color: #D6D6D6;
+}
+
 .upperInputsContainer {
   display: flex;
   justify-content: space-between;
