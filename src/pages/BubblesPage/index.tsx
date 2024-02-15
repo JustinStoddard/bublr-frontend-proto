@@ -161,7 +161,7 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
     setBubbleFocused(bubble);
     mapInstance.flyTo({
       center: [bubble.bubbleLongitude, bubble.bubbleLatitude],
-      zoom: 12, // You can adjust the zoom level here
+      zoom: 10, // You can adjust the zoom level here
       essential: true,
     });
   };
