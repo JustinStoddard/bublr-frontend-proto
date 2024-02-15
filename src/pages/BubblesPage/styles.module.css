@@ -390,6 +390,12 @@
   margin: 5px 0px 5px 0px;
 }
 
+.sliderLabel {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  margin-right: 10px;
+}
+
 .bubbleFocusedContainer {
   position: absolute;
   width: calc(100% - 60px);

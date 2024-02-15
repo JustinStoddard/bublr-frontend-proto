@@ -435,6 +435,7 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
                   />
                 </div>
                 <div className={styles.lowerInputsContainer}>
+                  <div className={styles.sliderLabel}>Radius</div>
                   <Slider
                     size="medium"
                     defaultValue={0.5}
