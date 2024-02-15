@@ -449,3 +449,9 @@
   color: #ffffff;
   font-size: 20px !important;
 }
+
+@media (max-width: 700px) {
+  .sliderInput {
+    margin: 0px;
+  }
+}
