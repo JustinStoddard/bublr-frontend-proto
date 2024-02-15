@@ -91,6 +91,10 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
       map.on('dragstart', () => {
         setBubbleFocused(null);
         setActiveMarker(null);
+        setButtonPillOpen(false);
+      });
+      map.on('dragend', () => {
+        setButtonPillOpen(true);
       });
     }
   }, [map, bubbleRadius, creatingBubble, bubbleFocused]);
@@ -295,6 +299,7 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
     setBubbleRadius(0.5);
     renderBubble(bubble, map as Map);
     setBubbleFocused(bubble);
+    flyTo(map as Map, bubble);
   };
 
   const radiusOnChange = (newValue: number | number[]) => {
