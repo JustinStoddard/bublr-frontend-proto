@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import styles from "./styles.module.css";
 import PageContainer from "../../components/PageContainer";
-import { Add, Check, ChevronLeft, Logout } from "@mui/icons-material";
+import { Add, Check, ChevronLeft, Close, Done, Logout } from "@mui/icons-material";
 import { Slider, TextField } from "@mui/material";
 import mapboxgl, { Map, Marker, GeoJSONSource } from 'mapbox-gl';
 import { getLocalStorageItem, setLocalStorageItem } from "../../utils/localStorage";
@@ -165,7 +165,7 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
     setBubbleFocused(bubble);
     mapInstance.flyTo({
       center: [bubble.bubbleLongitude, bubble.bubbleLatitude],
-      zoom: 10, // You can adjust the zoom level here
+      zoom: 11, // You can adjust the zoom level here
       essential: true,
     });
   };
@@ -420,14 +420,14 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
         <div className={styles.footerContainer}>
           {creatingBubble && (
             <div className={styles.createBubblePillContainer}>
-              <div className={styles.bubblePillButtonContainer}>
+              {/* <div className={styles.bubblePillButtonContainer}>
                 <div
                   className={styles.pillButton}
                   onClick={() => setButtonPillOpen(!buttonPillOpen)}
                 >
                   <ChevronLeft className={`${buttonPillOpen ? styles.pillButtonIconOpen : styles.pillButtonIconClosed}`} />
                 </div>
-              </div>
+              </div> */}
               <div className={`${buttonPillOpen ? styles.bubblePillControlsContainerOpen : styles.bubblePillControlsContainerClosed}`}>
                 <div className={styles.upperInputsContainer}>
                   <TextField
@@ -439,6 +439,23 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
                     onChange={(e) => setBubbleName(e.target.value)}
                     className={styles.nameInput}
                   />
+                  <div
+                    className={`${styles.button} ${styles.cancel}`}
+                    onClick={() => {
+                      setCreatingBubble(false);
+                      setShowMarker(false);
+                    }}
+                  >
+                    <Close />
+                  </div>
+                  <div
+                    className={`${styles.button} ${styles.create} ${bubbleName === "" ? styles.createDisabled : ""}`}
+                    onClick={() => {
+                      if (bubbleName !== "") createBubble();
+                    }}
+                  >
+                    <Done />
+                  </div>
                 </div>
                 <div className={styles.lowerInputsContainer}>
                   <div className={styles.sliderLabel}>Radius</div>
@@ -455,25 +472,6 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
                     className={styles.sliderInput}
                   />
                 </div>
-                <div className={styles.buttonsContainer}>
-                  <div
-                    className={`${styles.button} ${styles.cancel}`}
-                    onClick={() => {
-                      setCreatingBubble(false);
-                      setShowMarker(false);
-                    }}
-                  >
-                    Cancel
-                  </div>
-                  <div
-                    className={`${styles.button} ${styles.create} ${bubbleName === "" ? styles.createDisabled : ""}`}
-                    onClick={() => {
-                      if (bubbleName !== "") createBubble();
-                    }}
-                  >
-                    Create
-                  </div>
-                </div>
               </div>
             </div>
           )}
@@ -481,17 +479,15 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
             <div className={styles.bubbleFocusedContainer}>
               <div className={styles.bubbleFocusedName}>{bubbleFocused.bubbleName}</div>
               <div className={styles.bubbleFocusedRadius}>Radius: {bubbleFocused.bubbleRadius} miles</div>
-              <div className={styles.bubbleFocusedRadius}>Lng: {bubbleFocused.bubbleLongitude}</div>
-              <div className={styles.bubbleFocusedRadius}>Lat: {bubbleFocused.bubbleLatitude}</div>
               <div className={styles.bubbleFocusedButtonsContainer}>
                 <div
-                  className={`${styles.button} ${styles.cancel}`}
+                  className={`${styles.button} ${styles.cancel} ${styles.pill}`}
                   onClick={() => deleteBubble(bubbleFocused)}
                 >
                   Delete
                 </div>
                 <div
-                  className={`${styles.button} ${styles.create}`}
+                  className={`${styles.button} ${styles.create} ${styles.pill}`}
                   onClick={()  => visitBubble(bubbleFocused)}
                 >
                   Visit

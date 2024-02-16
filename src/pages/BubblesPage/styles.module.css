@@ -276,10 +276,9 @@
 
 .bubblePillButtonContainer {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  width: 100%;
-  margin-top: 5px;
+  margin: 5px 15px 0px 15px;
 }
 
 .pillButton {
@@ -308,8 +307,9 @@
 }
 
 .bubblePillControlsContainerOpen {
-  height: 108px;
+  height: 65px;
   margin-bottom: 5px;
+  margin-top: 10px;
   transition: 0.3s;
   padding: 6px 15px 15px 15px;
   overflow: hidden;
@@ -325,15 +325,9 @@
   opacity: 0;
 }
 
-.buttonsContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .button {
-  width: 135px;
-  height: 37px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -343,8 +337,15 @@
   font-family: 'Nunito', sans-serif;
 }
 
+.pill {
+  width: 105px;
+  height: 30px;
+}
+
 .cancel {
   background-color: #EC3B3B;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .create {
@@ -379,7 +380,7 @@
 }
 
 .nameInput {
-  width: 100%;
+  width: 70%;
   border-radius: 30px !important;
 }
 
@@ -406,7 +407,7 @@
   max-width: 500px;
   background-color: #F5F5F5;
   border-radius: 30px;
-  bottom: 90px;
+  bottom: 75px;
   z-index: 2;
   border: 1px #D6D6D6 solid;
   display: flex;
@@ -432,10 +433,10 @@
 
 .bubbleFocusedButtonsContainer {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  width: 100%;
-  margin-top: 10px;
+  width: fill;
+  margin: 10px 25px 0px 25px;
 }
 
 .landingTitleSub {
