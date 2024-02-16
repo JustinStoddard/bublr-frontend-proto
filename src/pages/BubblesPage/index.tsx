@@ -75,8 +75,6 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
         initializeMap();
       }
     }
-
-    return () => map?.remove();
   }, [map]);
 
   useEffect(() => {
@@ -457,11 +455,11 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
                   </div>
                 </div>
                 <div className={styles.lowerInputsContainer}>
-                  <div className={styles.sliderLabel}>Radius</div>
+                  <div className={styles.sliderLabel}>Size</div>
                   <Slider
                     size="medium"
                     defaultValue={0.5}
-                    valueLabelFormat={(value: number) => `${value} mi`}
+                    valueLabelFormat={(value: number) => `${value * 2} mi`}
                     valueLabelDisplay="auto"
                     value={bubbleRadius}
                     onChange={(_, newValue: number | number[], __) => radiusOnChange(newValue)}

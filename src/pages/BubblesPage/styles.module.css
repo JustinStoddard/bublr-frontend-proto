@@ -276,8 +276,8 @@
 }
 
 .lowerNavButton {
-  color: #006DAA;
-  font-size: 40px;
+  color: #006DAA !important;
+  font-size: 40px !important;
   cursor: pointer;
 }
 
