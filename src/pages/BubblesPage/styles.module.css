@@ -276,14 +276,14 @@
 
 .bubblePillButtonContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin: 5px 15px 0px 15px;
 }
 
 .pillButton {
-  width: 30px;
-  height: 30px;
+  width: 60px;
+  height: 5px;
   background-color: #006DAA;
   border-radius: 30px;
   display: flex;
@@ -309,9 +309,8 @@
 .bubblePillControlsContainerOpen {
   height: 65px;
   margin-bottom: 5px;
-  margin-top: 10px;
   transition: 0.3s;
-  padding: 6px 15px 15px 15px;
+  padding: 6px 15px 10px 15px;
   overflow: hidden;
   opacity: 1;
 }

@@ -420,14 +420,12 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
         <div className={styles.footerContainer}>
           {creatingBubble && (
             <div className={styles.createBubblePillContainer}>
-              {/* <div className={styles.bubblePillButtonContainer}>
+              <div className={styles.bubblePillButtonContainer}>
                 <div
                   className={styles.pillButton}
                   onClick={() => setButtonPillOpen(!buttonPillOpen)}
-                >
-                  <ChevronLeft className={`${buttonPillOpen ? styles.pillButtonIconOpen : styles.pillButtonIconClosed}`} />
-                </div>
-              </div> */}
+                />
+              </div>
               <div className={`${buttonPillOpen ? styles.bubblePillControlsContainerOpen : styles.bubblePillControlsContainerClosed}`}>
                 <div className={styles.upperInputsContainer}>
                   <TextField
