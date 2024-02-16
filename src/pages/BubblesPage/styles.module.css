@@ -391,7 +391,8 @@
 
 .sliderInput {
   width: 94% !important;
-  margin: 5px 0px 5px 0px;
+  margin: 5px 0px 5px 0px !important;
+  padding: 13px 0 !important;
 }
 
 .sliderLabel {
