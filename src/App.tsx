@@ -12,6 +12,8 @@ const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const BubblesPage = lazy(() => import('./pages/BubblesPage'));
 const BubblePage = lazy(() => import('./pages/BubblePage'));
+const CommunitiesPage = lazy(() => import('./pages/CommunitiesPage'));
+const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
 
 function App() {
   const [userContext, setUserContext] = useState<UserContext>(() => {
@@ -37,6 +39,8 @@ function App() {
           <Route path="/register" element={<RegisterPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
           <Route path="/bubbles" element={<BubblesPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
           <Route path="/bubbles/:bubbleId" element={<BubblePage userContext={userContext} />} />
+          <Route path="/communities" element={<CommunitiesPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
         </Routes>
       </Suspense>
     </Router>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import styles from "./styles.module.css";
 import PageContainer from "../../components/PageContainer";
-import { Add, Check, ChevronLeft, Close, Done, Logout } from "@mui/icons-material";
+import { Add, Check, Close, Done, Groups, Logout, Public, Notifications } from "@mui/icons-material";
 import { Slider, TextField } from "@mui/material";
 import mapboxgl, { Map, Marker, GeoJSONSource } from 'mapbox-gl';
 import { getLocalStorageItem, setLocalStorageItem } from "../../utils/localStorage";
@@ -75,6 +75,8 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
         initializeMap();
       }
     }
+
+    return () => map?.remove();
   }, [map]);
 
   useEffect(() => {
@@ -487,11 +489,20 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
                   className={`${styles.button} ${styles.create} ${styles.pill}`}
                   onClick={()  => visitBubble(bubbleFocused)}
                 >
-                  Visit
+                  Message
                 </div>
               </div>
             </div>
           )}
+          <div onClick={() => navigate("/bubbles")}>
+            <Public className={styles.lowerNavButton} />
+          </div>
+          <div onClick={() => navigate("/communities")}>
+            <Groups className={styles.lowerNavButton} />
+          </div>
+          <div onClick={() => navigate("/notifications")}>
+            <Notifications className={styles.lowerNavButton} />
+          </div>
         </div>
       </div>
     </PageContainer>

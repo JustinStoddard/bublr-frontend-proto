@@ -271,8 +271,14 @@
   z-index: 2;
   background-color: #F5F5F5;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+}
+
+.lowerNavButton {
+  color: #006DAA;
+  font-size: 40px;
+  cursor: pointer;
 }
 
 .bubblePillButtonContainer {
