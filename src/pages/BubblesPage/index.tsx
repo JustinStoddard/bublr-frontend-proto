@@ -38,7 +38,6 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
     return bubbles[0]?.bubbleLatitude || 40.758578;
   });
   const [bubbleFocused, setBubbleFocused] = useState<Bubble | null>(() => {
-    if (!lng && !lat) return null;
     const bubbles = getBubbles(userContext.user?.id as string);
     const bubble = bubbles.find(bubble => bubble.bubbleLongitude === bubbleLongitude && bubble.bubbleLatitude === bubbleLatitude);
     if (!bubble) return null;
