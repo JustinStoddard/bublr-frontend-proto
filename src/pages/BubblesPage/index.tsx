@@ -56,7 +56,7 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
         container: "map",
         style: 'mapbox://styles/justin-stoddard/clq21l1m300bt01mrawpm5ijl',
         center: [bubbleLongitude, bubbleLatitude],
-        zoom: 12
+        zoom: 11
       });
   
       mapInstance.on("load", () => {
