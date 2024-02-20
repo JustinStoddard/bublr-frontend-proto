@@ -216,6 +216,14 @@
   cursor: default;
 }
 
+.noBubblesIconContainer {
+  position: relative;
+  height: 80px;
+  width: 80px;
+  border-radius: 50px;
+  margin-bottom: 15px;
+}
+
 .circle {
   position: absolute;
   height: 26px;
@@ -229,6 +237,16 @@
   background-color: #D6D6D6;
 }
 
+.noBubblesCircle {
+  position: absolute;
+  height: 52px;
+  width: 52px;
+  background-color: #006DAA;
+  border-radius: 50px;
+  left: 4px;
+  bottom: 4px;
+}
+
 .addIcon {
   position: absolute;
   color: #006DAA;
@@ -240,7 +258,16 @@
   color: #D6D6D6;
 }
 
+.noBubblesAddIcon {
+  position: absolute;
+  color: #006DAA;
+  font-size: 40px !important;
+  right: 0px;
+  top: 0px;
+}
+
 .mapContainer {
+  position: relative;
   height: calc(100% - 115px);
   width: 100%;
   z-index: 1;
@@ -248,8 +275,76 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: darkgray;
   box-sizing: border-box;
+}
+
+.map {
+  height: 100%;
+  width: 100%;
+}
+
+.noBubblesModulOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #000000;
+  opacity: 0.2;
+  z-index: 2;
+}
+
+.noBubblesModulContainer {
+  position: absolute;
+  z-index: 3;
+  background: #ffffff;
+  border-radius: 30px;
+  height: 85%;
+  width: 80%;
+  max-width: 400px;
+  max-height: 400px;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.noBubblesHeader {
+  color: #006DAA;
+  font-size: 30px;
+  font-weight: 800;
+  font-family: 'Righteous', sans-serif;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.noBubblesSubHeader {
+  color: #000000;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.noBubblesButton {
+  background: #006DAA;
+  border-radius: 30px;
+  width: 80%;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.noBubblesButtonText {
+  color: #ffffff;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
 }
 
 .createBubblePillContainer {

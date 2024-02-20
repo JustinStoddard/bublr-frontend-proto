@@ -26,7 +26,13 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
 
   const [creatingBubble, setCreatingBubble] = useState<boolean>(false);
   const [buttonPillOpen, setButtonPillOpen] = useState<boolean>(true);
+  const [buttonPillAlwaysClosed, setButtonPillAlwaysClosed] = useState<boolean>(false);
   const [showMarker, setShowMarker] = useState<boolean>(false);
+  const [showCreateBubbleModul, setShowCreateBubbleModul] = useState<boolean>(() => {
+    const bubbles = getBubbles(userContext.user?.id as string);
+    if (bubbles.length === 0) return true;
+    return false;
+  });
   const [bubbleLongitude, setBubbleLongitude] = useState(() => {
     const bubbles = getBubbles(userContext.user?.id as string);
     if (lng) return lng;
@@ -299,6 +305,7 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
     renderBubble(bubble, map as Map);
     setBubbleFocused(bubble);
     flyTo(map as Map, bubble);
+    setShowCreateBubbleModul(false);
   };
 
   const radiusOnChange = (newValue: number | number[]) => {
@@ -319,6 +326,9 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
     unrenderBubble(focusedBubble, map as Map);
     setBubbleFocused(null);
     setActiveMarker(null);
+    if (filteredBubbles.length === 0) {
+      setShowCreateBubbleModul(true);
+    }
   };
 
   const visitBubble = (focusedBubble: Bubble) => {
@@ -415,17 +425,42 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
             <Add className={`${styles.addIcon} ${creatingBubble ? styles.addIconDisabled : ""}`} />
           </div>
         </div>
-        <div id="map" className={styles.mapContainer} />
+        <div className={styles.mapContainer}>
+          {(showCreateBubbleModul && !creatingBubble) && (
+            <>
+              <div className={styles.noBubblesModulOverlay} />
+              <div className={styles.noBubblesModulContainer}>
+                <div className={styles.noBubblesIconContainer}>
+                  <div className={styles.noBubblesCircle} />
+                  <Add className={styles.noBubblesAddIcon} />
+                </div>
+                <div className={styles.noBubblesHeader}>Create your first bubble!</div>
+                <div className={styles.noBubblesSubHeader}>Connect with your community, discover exciting events, and meet amazing people!</div>
+                <div
+                  className={styles.noBubblesButton}
+                  onClick={() => {
+                    setCreatingBubble(true);
+                    setButtonPillOpen(true);
+                    setShowMarker(true);
+                  }}
+                >
+                  <div className={styles.noBubblesButtonText}>Create bubble</div>
+                </div>
+              </div>
+            </>
+          )}
+          <div id="map" className={styles.map}/>
+        </div>
         <div className={styles.footerContainer}>
           {creatingBubble && (
             <div className={styles.createBubblePillContainer}>
               <div className={styles.bubblePillButtonContainer}>
                 <div
                   className={styles.pillButton}
-                  onClick={() => setButtonPillOpen(!buttonPillOpen)}
+                  onClick={() => setButtonPillAlwaysClosed(!buttonPillAlwaysClosed)}
                 />
               </div>
-              <div className={`${buttonPillOpen ? styles.bubblePillControlsContainerOpen : styles.bubblePillControlsContainerClosed}`}>
+              <div className={`${buttonPillOpen && !buttonPillAlwaysClosed ? styles.bubblePillControlsContainerOpen : styles.bubblePillControlsContainerClosed}`}>
                 <div className={styles.upperInputsContainer}>
                   <TextField
                     variant="outlined"
@@ -455,11 +490,11 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
                   </div>
                 </div>
                 <div className={styles.lowerInputsContainer}>
-                  <div className={styles.sliderLabel}>Size</div>
+                  <div className={styles.sliderLabel}>Radius</div>
                   <Slider
                     size="medium"
                     defaultValue={0.5}
-                    valueLabelFormat={(value: number) => `${value * 2} mi`}
+                    valueLabelFormat={(value: number) => `${value} mi`}
                     valueLabelDisplay="auto"
                     value={bubbleRadius}
                     onChange={(_, newValue: number | number[], __) => radiusOnChange(newValue)}
