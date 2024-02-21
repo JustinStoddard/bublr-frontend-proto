@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Groups, GroupsOutlined, Home, HomeOutlined, Notifications, NotificationsOutlined, Public, PublicOutlined } from "@mui/icons-material";
+import { BubbleChart, BubbleChartOutlined, Groups, GroupsOutlined, Home, HomeOutlined, Notifications, NotificationsOutlined, Public, PublicOutlined } from "@mui/icons-material";
 
 const NavigationFooter = () => {
   const navigate = useNavigate();
@@ -11,9 +11,9 @@ const NavigationFooter = () => {
     <div className={styles.footerContainer}>
       <div onClick={() => navigate("/bubbles")}>
         {location.pathname === "/bubbles" ? (
-          <Home className={styles.lowerNavButton} />
+          <BubbleChart className={styles.lowerNavButton} />
         ) : (
-          <HomeOutlined className={styles.lowerNavButton} />
+          <BubbleChartOutlined className={styles.lowerNavButton} />
         )}
       </div>
       <div onClick={() => navigate("/communities")}>
