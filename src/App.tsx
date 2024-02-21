@@ -39,8 +39,8 @@ function App() {
           <Route path="/register" element={<RegisterPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
           <Route path="/bubbles" element={<BubblesPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
           <Route path="/bubbles/:bubbleId" element={<BubblePage userContext={userContext} />} />
-          <Route path="/communities" element={<CommunitiesPage />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/communities" element={<CommunitiesPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
+          <Route path="/notifications" element={<NotificationsPage userContext={userContext} setUserContext={(c: UserContext) => storeUserContext(c)} />} />
         </Routes>
       </Suspense>
     </Router>

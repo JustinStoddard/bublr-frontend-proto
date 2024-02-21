@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import styles from "./styles.module.css";
 import PageContainer from "../../components/PageContainer";
-import { Add, Check, Close, Done, Groups, Logout, Public, Notifications } from "@mui/icons-material";
+import { Add, Close, Done } from "@mui/icons-material";
 import { Slider, TextField } from "@mui/material";
 import mapboxgl, { Map, Marker, GeoJSONSource } from 'mapbox-gl';
 import { getLocalStorageItem, setLocalStorageItem } from "../../utils/localStorage";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Bubble, BubbleMessage, BublrAccountType, UserContext } from "../../types/bubble-types";
+import { Bubble, BubbleMessage, UserContext } from "../../types/bubble-types";
 import { getBubbles } from "../../utils/getBubbles";
+import NavigationHeader from "../../components/NavigationHeader";
+import NavigationFooter from "../../components/NavigationFooter";
  
 mapboxgl.accessToken = 'pk.eyJ1IjoianVzdGluLXN0b2RkYXJkIiwiYSI6ImNscTIxajJ4djAwdHgycnMyeW0yeXNzdG8ifQ.Fo2r-RxjpR8GJ7a6cq7gPg';
 
@@ -54,7 +56,6 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
   const [map, setMap] = useState<Map | null>(null);
   const [marker, setMarker] = useState<Marker | null>(null);
   const [activeMarker, setActiveMarker] = useState<Marker | null>(null);
-  const [userDrawerOpen, setUserDrawerOpen] = useState(false);
 
   useEffect(() => {
     const initializeMap = () => {
@@ -62,7 +63,7 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
         container: "map",
         style: 'mapbox://styles/justin-stoddard/clq21l1m300bt01mrawpm5ijl',
         center: [bubbleLongitude, bubbleLatitude],
-        zoom: 11
+        zoom: 11,
       });
   
       mapInstance.on("load", () => {
@@ -337,94 +338,21 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
     setActiveMarker(null);
   };
 
-  const handleLogout = () => {
-    const userContext: UserContext = {
-      loggedIn: false,
-      user: null,
-    };
-    setUserContext(userContext);
-    setUserDrawerOpen(false);
-    navigate("/");
-  };
-
   return (
     <PageContainer>
       <div className={styles.bubblePageContainer}>
-        <div className={`${styles.userDrawerContainerClosed} ${userDrawerOpen ? styles.userDrawerContainerOpen : ""}`}>
-          <div
-            className={`${styles.userDrawerBackground} ${userDrawerOpen ? styles.userDrawerBackgroundOpen : ""}`}
-            onClick={() => setUserDrawerOpen(false)}
-          />
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className={`${styles.userDrawer} ${userDrawerOpen ? styles.userDrawerOpen : ""}`}
-          >
-            <div className={styles.userDrawerContentContainer}>
-              <div
-                onClick={() => setUserDrawerOpen(true)}
-                className={styles.userDrawerPhotoContainer}
-              >
-                <div className={styles.userDrawerText}>
-                  {userContext.user?.displayName.substring(0, 2)}
-                </div>
-              </div>
-              <div className={styles.userDrawerTitleContainer}>
-                <div className={styles.drawerDisplayName}>
-                  {userContext.user?.displayName}
-                  {userContext.user?.accountType === BublrAccountType.Premium && (
-                    <div className={styles.premiumBadgeContainer}>
-                      <Check className={styles.checkIcon} />
-                    </div>
-                  )}
-                </div>
-                <div className={styles.drawerHandle}>{userContext.user?.handle}</div>
-              </div>
-            </div>
-            <div
-              onClick={handleLogout}
-              className={styles.logoutContainer}
-            >
-              <div className={styles.logoutText}>Logout</div>
-              <Logout className={styles.logoutIcon} />
-            </div>
-          </div>
-        </div>
-        <div className={styles.headerContainer}>
-          <div
-            onClick={() => setUserDrawerOpen(true)}
-            className={styles.userPhotoContainer}
-          >
-            <div className={styles.userText}>
-              {userContext.user?.displayName.substring(0, 2)}
-            </div>
-          </div>
-          <div
-            onClick={() => navigate("/")}
-            className={styles.logoContainer}
-          >
-            <div className={styles.dotsContainer}>
-              <div className={styles.dot1} />
-              <div className={styles.dot2} />
-              <div className={styles.dot3} />
-            </div>
-            <div className={styles.logo}>
-              bublr<span className={styles.landingTitleSub}>proto</span>
-            </div>
-          </div>
-          <div
-            className={`${styles.createBubbleButtonContainer} ${creatingBubble ? styles.bubbleButtonDisabled : ""}`}
-            onClick={() => {
-              if (!creatingBubble) {
-                setCreatingBubble(true);
-                setButtonPillOpen(true);
-                setShowMarker(true);
-              }
-            }}
-          >
-            <div className={`${styles.circle} ${creatingBubble ? styles.circleDisabled : ""}`} />
-            <Add className={`${styles.addIcon} ${creatingBubble ? styles.addIconDisabled : ""}`} />
-          </div>
-        </div>
+        <NavigationHeader
+          userContext={userContext}
+          setUserContext={setUserContext}
+          creatingBubble={creatingBubble}
+          createBubble={() => {
+            if (!creatingBubble) {
+              setCreatingBubble(true);
+              setButtonPillOpen(true);
+              setShowMarker(true);
+            }
+          }}
+        />
         <div className={styles.mapContainer}>
           {(showCreateBubbleModul && !creatingBubble) && (
             <>
@@ -449,9 +377,7 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
               </div>
             </>
           )}
-          <div id="map" className={styles.map}/>
-        </div>
-        <div className={styles.footerContainer}>
+          <div id="map" className={styles.map} />
           {creatingBubble && (
             <div className={styles.createBubblePillContainer}>
               <div className={styles.bubblePillButtonContainer}>
@@ -527,16 +453,8 @@ const BubblesPage = ({ userContext, setUserContext }: Props) => {
               </div>
             </div>
           )}
-          <div onClick={() => navigate("/bubbles")}>
-            <Public className={styles.lowerNavButton} />
-          </div>
-          <div onClick={() => navigate("/communities")}>
-            <Groups className={styles.lowerNavButton} />
-          </div>
-          <div onClick={() => navigate("/notifications")}>
-            <Notifications className={styles.lowerNavButton} />
-          </div>
         </div>
+        <NavigationFooter />
       </div>
     </PageContainer>
   );

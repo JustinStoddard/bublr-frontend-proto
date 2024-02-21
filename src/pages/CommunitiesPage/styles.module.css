@@ -1,0 +1,13 @@
+.communitiesPageContainer {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.communitiesContentContainer {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 50px 15px 65px 15px;
+}
