@@ -4,7 +4,7 @@ import "./App.css"
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import PageLoader from "./components/PageLoader";
-import { BublrUser, UserContext } from './types/bubble-types';
+import { UserContext } from './types/bubble-types';
 import LandingPage from './pages/LandingPage';
 import { getLocalStorageItem, setLocalStorageItem } from './utils/localStorage';
 
